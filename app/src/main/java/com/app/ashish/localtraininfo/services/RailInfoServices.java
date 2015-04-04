@@ -20,16 +20,9 @@ import java.io.InputStream;
  * Created by ashis_000 on 4/4/2015.
  */
 public class RailInfoServices implements RailInfoInterface {
-    private String url = "";
-    private EditText editText = null;
-
-    public RailInfoServices(EditText editTest) {
-        this.editText = editText;
-    }
     @Override
     public String getStationListByName(String stnName) {
-        url = "http://erail.in/rail/getTrains.aspx?Station_From=JOX&Station_To=HWH&DataSource=0&Language=0&Cache=true";
-        new WebServiceCall(url,editText).execute();
+        new WebServiceCall().execute();
         return null;
     }
 
