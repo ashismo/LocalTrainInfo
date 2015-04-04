@@ -16,6 +16,7 @@ import org.apache.http.protocol.HttpContext;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -44,10 +45,10 @@ public class WebServiceCall extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String results) {
         if (results != null) {
-            if(commonData.getAllStationsMap() == null) {
+            if(commonData.getAllStnList() == null) {
                 if(commonData.getWebServiceCallType() == WebServiceCallType.ALL_STATION_NAME_CALL) {
-                    Map<String, String> allStnMap = RailInfoUtil.parseStationDetails(results);
-                    commonData.setAllStationsMap(allStnMap);
+                    List<String> allStnMap = RailInfoUtil.parseStationDetails(results);
+                    commonData.setAllStnList(allStnMap);
                 }
             }
             DataShareSingleton.getInstance().getEditText().setText(results);

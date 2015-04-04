@@ -12,6 +12,7 @@ import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.DatabaseUtil;
+import com.app.ashish.localtraininfo.util.RailInfoUtil;
 
 /**
  * Created by ashis_000 on 4/4/2015.
@@ -42,8 +43,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             public void onClick(View v) {
                 EditText fromStn = (EditText)findViewById(R.id.fromStn);
                 EditText toStn = (EditText)findViewById(R.id.toStn);
-                DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
-toStn.setText(dbUtil.getStationByCodeOrName("BLY")[0]);
+toStn.setText(RailInfoUtil.getStationByCodeOrName(fromStn.getText().toString().toUpperCase()).get(0));
             }
         });
     }

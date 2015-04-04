@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
 
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.util.DataShareSingleton;
 
 
 public class MainActivity extends ActionBarActivity
@@ -45,6 +46,7 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Display the train schedule screen by default
+        DataShareSingleton.getInstance().setContext(getApplicationContext());
         Intent intent = new Intent(getApplicationContext(), TrainScheduleActivity.class);
         startActivity(intent);
     }

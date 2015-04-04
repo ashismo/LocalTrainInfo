@@ -6,6 +6,7 @@ import android.widget.EditText;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,7 +16,8 @@ public class DataShareSingleton {
     private static DataShareSingleton dataShareObj;
     private EditText editText = null;
     private String url = "";
-    private Map<String, String> allStationsMap = null;
+    private String allStationsDetails = null;
+    private List<String> allStnList = null;
     private WebServiceCallType webServiceCallType;
     private Context context;
 
@@ -45,12 +47,12 @@ public class DataShareSingleton {
         this.url = url;
     }
 
-    public Map<String, String> getAllStationsMap() {
-        return allStationsMap;
+    public String getAllStationsDetails() {
+        return allStationsDetails;
     }
 
-    public void setAllStationsMap(Map<String, String> allStationsMap) {
-        this.allStationsMap = allStationsMap;
+    public void setAllStationsDetails(String allStationsDetails) {
+        this.allStationsDetails = allStationsDetails;
     }
 
     public WebServiceCallType getWebServiceCallType() {
@@ -67,5 +69,13 @@ public class DataShareSingleton {
 
     public void setContext(Context context) {
         this.context = context;
+    }
+
+    public List<String> getAllStnList() {
+        return allStnList;
+    }
+
+    public void setAllStnList(List<String> allStnList) {
+        this.allStnList = allStnList;
     }
 }
