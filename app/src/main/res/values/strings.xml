@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Local Train Info</string>
+    <string name="trainSchedule">Train Schedule</string>
+    <string name="liveStatus">Live Status</string>
+    <string name="checkPNR">Check PNR</string>
+    <string name="searchHistory">Search History</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="action_settings">Settings</string>
+
+    <!-- Train Schedule Screen -->
+    <string name="fromStn">From Station</string>
+    <string name="toStn">To Station</string>
+
+    <string name="station_prompt">Search a Station</string>
+    <string-array name="station_array">
+        <item>Janai Road - JOX</item>
+    </string-array>
+</resources>
