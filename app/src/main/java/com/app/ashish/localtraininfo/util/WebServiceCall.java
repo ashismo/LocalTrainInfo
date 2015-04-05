@@ -1,8 +1,12 @@
 package com.app.ashish.localtraininfo.util;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.widget.EditText;
 
+import com.app.ashish.localtraininfo.activity.MainActivity;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 
 import org.apache.http.HttpEntity;
@@ -25,7 +29,17 @@ import java.util.Map;
 public class WebServiceCall extends AsyncTask<Void, Void, String> {
 
     private DataShareSingleton commonData = DataShareSingleton.getInstance();
+    private ProgressDialog mProgressDialog = null;
+    private Context context;
 
+    public WebServiceCall(Context context) {
+        this.context = context;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+    }
     @Override
     protected String doInBackground(Void... params) {
         HttpClient httpClient = new DefaultHttpClient();

@@ -1,5 +1,9 @@
 package com.app.ashish.localtraininfo.activity;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
@@ -12,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.adapters.TrainScheduleListAdapter;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
@@ -20,6 +25,16 @@ import com.app.ashish.localtraininfo.util.DatabaseUtil;
 import com.app.ashish.localtraininfo.util.RailInfoUtil;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -30,6 +45,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
     private Button searchTrain;
     private ArrayAdapter<String> dataAdapter = null;
     private ListView listView = null;
+    private DataShareSingleton commonData = DataShareSingleton.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,9 +109,27 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 // Call webservice to get the train schedule
-                new RailInfoServices().getTrainListByRoute(fromStnTxt.getText().toString(), toStnTxt.getText().toString());
+//                new RailInfoServices(getApplicationContext()).getTrainListByRoute(fromStnTxt.getText().toString(), toStnTxt.getText().toString());
+                getTrainListByRoute(fromStnTxt.getText().toString(), toStnTxt.getText().toString());
             }
+
         });
+    }
+
+    private void getTrainListByRoute(String fromStn, String toStn) {
+        DataShareSingleton appData = DataShareSingleton.getInstance();
+        String url = "http://erail.in/rail/getTrains.aspx?Station_From="+ fromStn +
+                "&Station_To=" + toStn + "&DataSource=0&Language=0&Cache=true";
+        appData.setUrl(url);
+        appData.setWebServiceCallType(WebServiceCallType.TRAIN_SCHEDULE_CAL);
+
+        Intent i = new Intent(getApplicationContext(), SplashScreenActivity.class);
+        startActivity(i);
+
+        ListView scheduleView = (ListView)findViewById(R.id.scheduleView);
+        TrainScheduleListAdapter trainScheduleAdapter = new TrainScheduleListAdapter(getApplicationContext(), commonData.getTrainScheduleArray());
+        scheduleView.setAdapter(trainScheduleAdapter);
+//        return commonData.getTrainScheduleArray();
     }
 
     /**
@@ -104,7 +138,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
      * @param currentText
      */
     private void populateStationListInListView(String station, final EditText currentText) {
-        List<String> stationList = new RailInfoServices().getStationListByName(station.toUpperCase());
+        List<String> stationList = new RailInfoServices(getApplicationContext()).getStationListByName(station.toUpperCase());
         dataAdapter = new ArrayAdapter<String>(this, R.layout.station_list_layout,R.id.rowStnTextView, stationList);
         listView = (ListView) findViewById(R.id.stnListView);
         listView.setVisibility(View.VISIBLE);
@@ -120,4 +154,8 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             }
         });
     }
+
+
+
+
 }

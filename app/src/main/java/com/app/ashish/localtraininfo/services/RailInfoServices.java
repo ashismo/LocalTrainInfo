@@ -1,5 +1,6 @@
 package com.app.ashish.localtraininfo.services;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.EditText;
 
@@ -26,7 +27,12 @@ import java.util.regex.Pattern;
  * Created by ashis_000 on 4/4/2015.
  */
 public class RailInfoServices implements RailInfoInterface {
-    DataShareSingleton commonData = DataShareSingleton.getInstance();
+    private DataShareSingleton commonData = DataShareSingleton.getInstance();
+    private Context context;
+
+    public RailInfoServices(Context context) {
+        this.context = context;
+    }
     @Override
     public List<String> getStationListByName(String stnName) {
 
@@ -52,7 +58,7 @@ public class RailInfoServices implements RailInfoInterface {
                 "&Station_To=" + toStn + "&DataSource=0&Language=0&Cache=true";
         appData.setUrl(url);
         appData.setWebServiceCallType(WebServiceCallType.TRAIN_SCHEDULE_CAL);
-        new WebServiceCall().execute();
+        new WebServiceCall(context).execute();
         return commonData.getTrainScheduleArray();
     }
 

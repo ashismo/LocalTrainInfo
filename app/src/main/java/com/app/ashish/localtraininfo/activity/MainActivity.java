@@ -37,6 +37,11 @@ public class MainActivity extends ActionBarActivity
     private CharSequence mTitle;
 
     @Override
+    protected void onStart() {
+        getAllStations();
+        super.onStart();
+    }
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -52,16 +57,17 @@ public class MainActivity extends ActionBarActivity
 
         // Display the train schedule screen by default
 //        EditText editText = (EditText)findViewById(R.id.serviceData);
-        DataShareSingleton appData = DataShareSingleton.getInstance();
-        String url = "http://111.118.213.140/js/cmp/stations.js";
-        appData.setUrl(url);
-//        appData.setEditText(editText);
-        appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
-        // Call Webservice
-        new WebServiceCall().execute();
+//        DataShareSingleton appData = DataShareSingleton.getInstance();
+//        String url = "http://111.118.213.140/js/cmp/stations.js";
+//        appData.setUrl(url);
+////        appData.setEditText(editText);
+//        appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
+//        // Call Webservice
+//        new WebServiceCall(getApplicationContext()).execute();
 
-        Intent intent = new Intent(getApplicationContext(), TrainScheduleActivity.class);
-        startActivity(intent);
+
+//        Intent intent = new Intent(getApplicationContext(), TrainScheduleActivity.class);
+//        startActivity(intent);
     }
 
     @Override
@@ -71,6 +77,11 @@ public class MainActivity extends ActionBarActivity
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+        switch(position) {
+            case 0: // Once the first item is selected
+                startActivity(new Intent(this, TrainScheduleActivity.class));
+        }
     }
 
     public void onSectionAttached(int number) {
@@ -163,6 +174,19 @@ public class MainActivity extends ActionBarActivity
             super.onAttach(activity);
             ((MainActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
+        }
+    }
+
+
+    private void getAllStations() {
+        DataShareSingleton appData = DataShareSingleton.getInstance();
+        if (appData.getAllStnList() == null) {
+            String url = "http://111.118.213.140/js/cmp/stations.js";
+            appData.setUrl(url);
+            appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
+
+            Intent i = new Intent(getApplicationContext(), StationNamesSplashScreenActivity.class);
+            startActivity(i);
         }
     }
 
