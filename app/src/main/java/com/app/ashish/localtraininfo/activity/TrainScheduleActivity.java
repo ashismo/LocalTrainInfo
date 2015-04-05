@@ -13,7 +13,9 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.app.ashish.localtraininfo.R;
 import com.app.ashish.localtraininfo.adapters.TrainScheduleListAdapter;
@@ -35,6 +37,7 @@ import org.apache.http.protocol.HttpContext;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -52,6 +55,8 @@ public class TrainScheduleActivity  extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Set the navigation up to the main page
         setContentView(R.layout.train_schedule);
+
+        ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.INVISIBLE);
 
         fromStnTxt = (EditText)findViewById(R.id.fromStn);
         toStnTxt = (EditText)findViewById(R.id.toStn);
@@ -74,7 +79,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                commonData.setTrainScheduleArray(null);
             }
 
         });
@@ -111,24 +116,31 @@ public class TrainScheduleActivity  extends ActionBarActivity {
                 // Call webservice to get the train schedule
 //                new RailInfoServices(getApplicationContext()).getTrainListByRoute(fromStnTxt.getText().toString(), toStnTxt.getText().toString());
                 getTrainListByRoute(fromStnTxt.getText().toString(), toStnTxt.getText().toString());
+
             }
 
         });
     }
 
     private void getTrainListByRoute(String fromStn, String toStn) {
+        ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.INVISIBLE);
         DataShareSingleton appData = DataShareSingleton.getInstance();
+        appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table
         String url = "http://erail.in/rail/getTrains.aspx?Station_From="+ fromStn +
                 "&Station_To=" + toStn + "&DataSource=0&Language=0&Cache=true";
         appData.setUrl(url);
         appData.setWebServiceCallType(WebServiceCallType.TRAIN_SCHEDULE_CAL);
 
         Intent i = new Intent(getApplicationContext(), SplashScreenActivity.class);
+        i.putExtra("from", fromStnTxt.getText().toString());
+        i.putExtra("to", toStnTxt.getText().toString());
         startActivity(i);
 
-        ListView scheduleView = (ListView)findViewById(R.id.scheduleView);
-        TrainScheduleListAdapter trainScheduleAdapter = new TrainScheduleListAdapter(getApplicationContext(), commonData.getTrainScheduleArray());
-        scheduleView.setAdapter(trainScheduleAdapter);
+//        ListView scheduleView = (ListView)findViewById(R.id.scheduleView);
+//        TrainScheduleListAdapter trainScheduleAdapter = new TrainScheduleListAdapter(getApplicationContext(), commonData.getTrainScheduleArray());
+//        scheduleView.setAdapter(trainScheduleAdapter);
+
+
 //        return commonData.getTrainScheduleArray();
     }
 
@@ -154,8 +166,5 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             }
         });
     }
-
-
-
 
 }

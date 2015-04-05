@@ -5,9 +5,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.ashish.localtraininfo.R;
@@ -57,18 +59,38 @@ public class TrainScheduleListAdapter extends BaseAdapter {
         if(scheduleArr != null && scheduleArr.length >= 5) {
             boolean isTrainAvailableToday = (scheduleArr[4].equalsIgnoreCase("true")) ? true:false;
             String availableToday = (scheduleArr[4].equalsIgnoreCase("true")) ? "YES":"NO";
-            textToBeDisplayed = "Train No:- " + scheduleArr[0] + " Dep:- " + scheduleArr[1] +
-                    " Arr:- " + scheduleArr[2] + " Journey:- " + scheduleArr[3] + " Running Today? " + availableToday;
-            tv.setText(textToBeDisplayed);
+//            textToBeDisplayed = "Train No:- " + scheduleArr[0] + " Dep:- " + scheduleArr[1] +
+//                    " Arr:- " + scheduleArr[2] + " Journey:- " + scheduleArr[3] + " Running Today? " + availableToday;
 
+            textToBeDisplayed = scheduleArr[0] + "    " + scheduleArr[1] +
+                    "  " + scheduleArr[2] + " " + scheduleArr[3] + "  " + availableToday;
+            tv.setText(textToBeDisplayed);
+            Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
             if(isTrainAvailableToday) {
-                convertView.findViewById(R.id.liveStatus).setVisibility(View.VISIBLE);
+                liveStatusBtn.setVisibility(View.VISIBLE);
             } else {
-                convertView.findViewById(R.id.liveStatus).setVisibility(View.INVISIBLE);
+                liveStatusBtn.setVisibility(View.INVISIBLE);
             }
+
+
+
         }
         // Check if train is available today
 
         return convertView;
+    }
+
+    public void liveStatusHandler(View v) {
+        //get the row the clicked button is in
+        LinearLayout vwParentRow = (LinearLayout)v.getParent();
+
+        TextView scheduleDtls = (TextView)vwParentRow.getChildAt(0);
+        Button liveStatusBtn = (Button)vwParentRow.getChildAt(1);
+        String scheduleStr = scheduleDtls.getText().toString();
+        String trainNo = "0";
+        if(scheduleStr != null && scheduleStr.split(" ").length > 0) {
+            trainNo = scheduleStr.split(" ")[0].trim();
+        }
+        liveStatusBtn.setText(trainNo);
     }
 }

@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent" android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:weightSum="7">
+    android:weightSum="7"
+    >
 
     <LinearLayout
         android:orientation="horizontal"
@@ -17,16 +18,16 @@
             android:id="@+id/trainScheduleDtls"
             android:textColor="#ff3433ff"
             android:textSize="18dp" />
-    </LinearLayout>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Live Status"
-        android:id="@+id/liveStatus"
-        android:layout_gravity="right"
-        android:layout_weight="2"
-        android:textColor="#ffff3742" />
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Live Status"
+            android:id="@+id/liveStatus"
+            android:layout_gravity="right"
+            android:layout_weight="2"
+            android:textColor="#ffff3742" />
+    </LinearLayout>
 
 
 </LinearLayout>

@@ -45,12 +45,27 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Train No   Dep   Arr   Time   Running?"
+            android:id="@+id/scheduleHeader"
+            android:textColor="#ffff1e17"
+            android:textSize="18dp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal">
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="464dp"
+            android:layout_height="match_parent"
             android:id="@+id/scheduleView" />
 
     </LinearLayout>

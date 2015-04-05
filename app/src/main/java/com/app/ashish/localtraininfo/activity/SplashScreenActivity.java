@@ -7,12 +7,18 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.adapters.TrainScheduleListAdapter;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.RailInfoUtil;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
 
 import android.os.Handler;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -31,10 +37,15 @@ import java.util.List;
  */
 public class SplashScreenActivity extends ActionBarActivity {
     private DataShareSingleton appData = DataShareSingleton.getInstance();
+    private String fromStn = "";
+    private String toStn = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+
+        fromStn = getIntent().getExtras().getString("from");
+        toStn = getIntent().getExtras().getString("to");
 
         new WebServiceCall().execute();
     }
@@ -80,10 +91,30 @@ public class SplashScreenActivity extends ActionBarActivity {
                 } else if(commonData.getWebServiceCallType() == WebServiceCallType.TRAIN_SCHEDULE_CAL) {
                     List<String> trainScheduleArray = RailInfoUtil.parseTrainScheduleDetails(results);
                     commonData.setTrainScheduleArray(trainScheduleArray);
+
+                    setContentView(R.layout.train_schedule);
+                    EditText fromTxt = (EditText) findViewById(R.id.fromStn);
+                    fromTxt.setText(fromStn);
+                    EditText toTxt = (EditText) findViewById(R.id.toStn);
+                    toTxt.setText(toStn);
+                    Button btn = (Button) findViewById(R.id.search);
+                    btn.setText("Back");
+                    ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.VISIBLE);
+
+                    btn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            finish();
+                        }
+                    });
+
+                    ListView scheduleView = (ListView)findViewById(R.id.scheduleView);
+                    TrainScheduleListAdapter trainScheduleAdapter = new TrainScheduleListAdapter(getApplicationContext(), commonData.getTrainScheduleArray());
+                    scheduleView.setAdapter(trainScheduleAdapter);
                 }
 
                 // close this activity
-                finish();
+//                finish();
                 //DataShareSingleton.getInstance().getEditText().setText(results);
             }
         }
