@@ -21,19 +21,6 @@
             android:id="@+id/toStn"
             tools:context=".SearchAndFilterList"
             android:hint="@string/toStn" />
-        <!-- <Spinner
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/fromStn"
-            android:entries="@array/station_array"
-            android:prompt="@string/station_prompt"/>
-
-        <Spinner
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/toStn"
-            android:entries="@array/station_array"
-            android:prompt="@string/station_prompt"/>-->
 
         <Button
             style="?android:attr/buttonStyleSmall"
@@ -52,10 +39,29 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:id="@+id/listView" />
+            android:id="@+id/stnListView" />
     </LinearLayout>
 
     <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:id="@+id/scheduleView"
+            android:layout_weight="1" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="68dp"
+            android:text="Live Status"
+            android:id="@+id/liveStatus" />
+    </LinearLayout>
+
+    <!--<LinearLayout
         android:orientation="horizontal"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
@@ -66,6 +72,6 @@
             android:text="New Text"
             android:id="@+id/serviceData"
             android:layout_gravity="center_horizontal" />
-    </LinearLayout>
+    </LinearLayout>-->
 
 </LinearLayout>

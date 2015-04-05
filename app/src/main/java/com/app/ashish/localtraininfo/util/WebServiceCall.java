@@ -45,13 +45,17 @@ public class WebServiceCall extends AsyncTask<Void, Void, String> {
     @Override
     protected void onPostExecute(String results) {
         if (results != null) {
-            if(commonData.getAllStnList() == null) {
-                if(commonData.getWebServiceCallType() == WebServiceCallType.ALL_STATION_NAME_CALL) {
+
+            if(commonData.getWebServiceCallType() == WebServiceCallType.ALL_STATION_NAME_CALL) {
+                if (commonData.getAllStnList() == null) {
                     List<String> allStnMap = RailInfoUtil.parseStationDetails(results);
                     commonData.setAllStnList(allStnMap);
                 }
+            } else if(commonData.getWebServiceCallType() == WebServiceCallType.TRAIN_SCHEDULE_CAL) {
+                List<String> trainScheduleArray = RailInfoUtil.parseTrainScheduleDetails(results);
+                commonData.setTrainScheduleArray(trainScheduleArray);
             }
-            DataShareSingleton.getInstance().getEditText().setText(results);
+            //DataShareSingleton.getInstance().getEditText().setText(results);
         }
     }
 

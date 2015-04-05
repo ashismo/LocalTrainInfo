@@ -18,6 +18,7 @@ public class DataShareSingleton {
     private String url = "";
     private String allStationsDetails = null;
     private List<String> allStnList = null;
+    private List<String> trainScheduleArray = null;
     private WebServiceCallType webServiceCallType;
     private Context context;
 
@@ -77,5 +78,13 @@ public class DataShareSingleton {
 
     public void setAllStnList(List<String> allStnList) {
         this.allStnList = allStnList;
+    }
+
+    public List<String> getTrainScheduleArray() {
+        return trainScheduleArray;
+    }
+
+    public void setTrainScheduleArray(List<String> trainScheduleArray) {
+        this.trainScheduleArray = trainScheduleArray;
     }
 }

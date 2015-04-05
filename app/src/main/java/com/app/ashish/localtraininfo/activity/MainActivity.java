@@ -13,9 +13,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
+import android.widget.EditText;
 
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.bean.WebServiceCallType;
+import com.app.ashish.localtraininfo.services.RailInfoInterface;
+import com.app.ashish.localtraininfo.services.RailInfoServices;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
+import com.app.ashish.localtraininfo.util.WebServiceCall;
 
 
 public class MainActivity extends ActionBarActivity
@@ -46,7 +51,15 @@ public class MainActivity extends ActionBarActivity
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
         // Display the train schedule screen by default
-        DataShareSingleton.getInstance().setContext(getApplicationContext());
+//        EditText editText = (EditText)findViewById(R.id.serviceData);
+        DataShareSingleton appData = DataShareSingleton.getInstance();
+        String url = "http://111.118.213.140/js/cmp/stations.js";
+        appData.setUrl(url);
+//        appData.setEditText(editText);
+        appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
+        // Call Webservice
+        new WebServiceCall().execute();
+
         Intent intent = new Intent(getApplicationContext(), TrainScheduleActivity.class);
         startActivity(intent);
     }

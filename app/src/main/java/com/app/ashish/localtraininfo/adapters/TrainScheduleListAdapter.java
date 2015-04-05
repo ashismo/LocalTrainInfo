@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by ashis_000 on 4/4/2015.
  */
-public class StationListAdapter extends BaseAdapter implements Filterable{
+public class TrainScheduleListAdapter extends BaseAdapter {
     @Override
     public int getCount() {
         return 0;
@@ -36,11 +36,6 @@ public class StationListAdapter extends BaseAdapter implements Filterable{
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        return null;
-    }
-
-    @Override
-    public Filter getFilter() {
         return null;
     }
 }

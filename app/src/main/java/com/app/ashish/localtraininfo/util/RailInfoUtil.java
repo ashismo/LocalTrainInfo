@@ -5,6 +5,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,48 +22,46 @@ public class RailInfoUtil {
         Map<String, String> allStationCodes = new HashMap<>();
         List<String> allStations = new ArrayList<>();
         if(serverResponse != null) {
-            serverResponse = serverResponse.substring(serverResponse.indexOf("\""), serverResponse.lastIndexOf("\";"));
+            if(serverResponse.indexOf("\"") != -1 && serverResponse.lastIndexOf("\";") != -1) { // This line indicates that the data format is correct
+                serverResponse = serverResponse.substring(serverResponse.indexOf("\""), serverResponse.lastIndexOf("\";"));
 
-            String[] allStn = serverResponse.split(",");
-
-            // Bulk update the database
-//            SQLiteDatabase userSettingsDB = null;
-            try {
-//                userSettingsDB = commonData.getContext().openOrCreateDatabase("APP_SETTINGS", Context.MODE_PRIVATE, null);
-//                String sql = "Insert or Replace into STATIONS (STN_CODE, STN_NAME) values(?,?)";
-//                SQLiteStatement insert = userSettingsDB.compileStatement(sql);
-                for(int i = 0; i < allStn.length; i+=2) {
-//                    allStationCodes.put(allStn[i], allStn[i + 1]);
-//                    allStationNames.put(allStn[i+1], allStn[i]);
+                String[] allStn = serverResponse.split(",");
+                for (int i = 0; i < allStn.length; i += 2) {
                     allStations.add((allStn[i] + "-" + allStn[i + 1]).toUpperCase());
-//                    insert.bindString(1, allStn[i]);
-//                    insert.bindString(2, allStn[i+1]);
-//                    insert.execute();
                 }
-//                allStationNames.putAll(allStationCodes);
-//                userSettingsDB.setTransactionSuccessful();
-            } catch (Exception e) {
-
-            } finally {
-//                if(userSettingsDB != null ) userSettingsDB.close();
             }
 
         }
         return allStations;
     }
 
-    public static List<String> getStationByCodeOrName(String stnCdOrName) {
-        List<String> matchedStnLst = new ArrayList<String>();
-        String regex = "(.*-|)" + stnCdOrName + ".*";
-        Pattern p = Pattern.compile(regex);
+    public static List<String> parseTrainScheduleDetails(String serverResponse) {
+        List<String> trainSchedule = new ArrayList<String>();
+//        String response = "~JOX~Janai Road~HWH~Howrah Jn~~2015-4-5-9-58-0~~~^36812~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~04.35~05.20~00.45~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6572~1~0~50~2015-04-04~2020-04-04~20~27~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C242~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36814~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~05.31~06.15~00.44~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6574~1~0~50~2015-04-04~2020-04-04~20~27~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C244~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36816~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~06.18~07.04~00.46~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6576~1~0~50~2015-04-04~2020-04-04~20~26~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C246~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36818~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~07.03~07.45~00.42~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6578~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C248~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36820~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~07.35~08.15~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6580~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C250~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36824~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~08.44~09.25~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6582~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C254~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36826~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~08.57~09.37~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6584~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C256~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36828~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~09.41~10.15~00.34~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6588~1~0~50~2015-04-04~2020-04-04~20~35~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C260~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36832~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~10.40~11.20~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6591~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C262~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36834~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~11.25~12.10~00.45~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6593~1~0~50~2015-04-04~2020-04-04~20~27~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C264~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36838~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~13.34~14.15~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6595~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C268~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36840~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~14.27~15.25~00.58~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6597~1~0~50~2015-04-04~2020-04-04~20~21~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C270~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36842~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~15.41~16.20~00.39~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6599~1~0~50~2015-04-04~2020-04-04~20~31~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C272~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36844~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~16.49~17.30~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6601~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C274~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36846~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~18.04~18.45~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6603~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C276~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36848~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~19.14~19.55~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6605~1~0~50~2015-04-04~2020-04-04~20~29~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C278~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36850~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~20.07~20.47~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6607~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C280~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36854~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~21.22~22.05~00.43~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6609~1~0~50~2015-04-04~2020-04-04~20~28~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C284~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36858~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~22.05~22.45~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6612~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C288~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36860~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~23.23~00.03~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6614~2~0~50~2015-04-04~2020-04-05~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C290~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36836~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~12.39~13.15~00.36~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6616~1~0~50~2015-04-04~2020-04-04~20~33~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C266~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36852~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~20.54~21.40~00.46~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6618~1~0~50~2015-04-04~2020-04-04~20~26~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C282~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36856~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~21.42~22.25~00.43~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6619~1~0~50~2015-04-04~2020-04-04~20~28~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C286~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36032~CDAE HWH LOCAL~Chandanpur~CDAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~10.22~11.05~00.43~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6665~1~0~50~2015-04-04~2020-04-04~20~28~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~CD502~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36034~CDAE HWH LOCAL~Chandanpur~CDAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~12.15~12.55~00.40~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6667~1~0~50~2015-04-04~2020-04-04~20~30~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~CD504~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36036~CDAE HWH LOCAL~Chandanpur~CDAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~15.31~16.05~00.34~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6669~1~0~50~2015-04-04~2020-04-04~20~35~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~CD506~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36038~CDAE HWH LOCAL~Chandanpur~CDAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~19.57~20.35~00.38~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6671~1~0~50~2015-04-04~2020-04-04~20~32~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~CD508~~~EMU~~1~ER~~BG~~~1000000~~0~1~^32412~BRPA SDAH LOCAL~Barui Para~BRPA~Sealdah~SDAH~Janai Road~JOX~Sealdah~SDAH~15.30~16.30~01.00~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6770~1~0~50~2015-04-04~2020-04-04~27~27~SUBURBAN:27:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:125,63,125,0,125,125:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~DK584~~~EMU~~1~ER~~BG~~~1000000~~0~1~^32414~BRPA SDAH LOCAL~Barui Para~BRPA~Sealdah~SDAH~Janai Road~JOX~Sealdah~SDAH~22.56~23.50~00.54~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~6784~1~0~50~2015-04-04~2020-04-04~27~30~SUBURBAN:27:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:125,63,125,0,125,125:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~DK598~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36084~MSAE HWH LOCAL~Massagram~MSAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~18.41~19.15~00.34~0000010~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~7195~1~0~50~2015-04-04~2020-04-04~21~37~SUBURBAN:21:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~MG562~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36088~MSAE HWH LOCAL~Massagram~MSAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~23.07~23.42~00.35~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~7197~1~0~50~2015-04-04~2020-04-04~21~36~SUBURBAN:21:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~MG566~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36086~MSAE HWH LOCAL~Massagram~MSAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~19.26~20.05~00.39~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~7198~1~0~50~2015-04-04~2020-04-04~21~32~SUBURBAN:21:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~MG564~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36072~GRAE HWH LOCAL~Gurap~GRAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~07.51~08.32~00.41~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~7396~1~0~50~2015-04-04~2020-04-04~21~31~SUBURBAN:21:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~P282~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36822~BWN HWH CHORD~Barddhaman Jn~BWN~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~08.11~08.57~00.46~1111111~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~10331~1~0~50~2015-04-04~2020-04-04~20~26~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~C252~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36012~BRPA HWH LOCAL~Barui Para~BRPA~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~11.01~11.35~00.34~1111110~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~13129~1~0~50~2015-04-04~2020-04-04~20~35~SUBURBAN:20:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:5,5,5,0,5,5~0~0~~120~1~~~~EMU~~1~ER~~BG~~~1000000~~0~1~^36082~MSAE HWH LOCAL~Massagram~MSAE~Howrah Jn~HWH~Janai Road~JOX~Howrah Jn~HWH~09.07~09.47~00.40~1111110~~~~~~~~0000000010~~~~~~~~~~~SUBURBAN~13680~1~0~50~2015-04-04~2020-04-04~21~32~SUBURBAN:21:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:95,48,95,0,95,95:0,0,0,0,0,0:0,0,0,0,0,0:0,0,0,0,0,0:10,5,10,0,10,10~0~0~~120~1~MG562~~~EMU~~1~ER~~BG~~~1000000~~0~1~";
+        String tempArr[] = serverResponse.split("\\^");
 
-        for (String stn:commonData.getAllStnList()) {
-            if (p.matcher(stn).matches()) {
-                matchedStnLst.add(stn);
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        int today = c.get(Calendar.DAY_OF_WEEK);
+
+        for(String eachTrainInfo : tempArr) {
+            String trainInfoArr[] = eachTrainInfo.split("~");
+            if(trainInfoArr != null && trainInfoArr.length >= 13) {
+                String trainAvailablity = trainInfoArr[13]; // If the value is 0111101 then the train runs on Tue,Wed,Thu,Fri,Sun
+                // Reformat the string to display sunday first
+                String sundayStatus = trainAvailablity.substring(trainAvailablity.length() - 1);
+                String otherdayStatus = trainAvailablity.substring(0,trainAvailablity.length() - 1);
+                trainAvailablity = sundayStatus+otherdayStatus;
+                char todayTrainAvailablility = trainAvailablity.charAt(today-1);
+                boolean isTrainAvailable = true;
+                if(todayTrainAvailablility == '0') {
+                    isTrainAvailable = false;
+                }
+                trainSchedule.add(trainInfoArr[0] + "/" + trainInfoArr[10] + "/" + trainInfoArr[11] + "/" + trainInfoArr[12] + "/" + isTrainAvailable);
+
             }
         }
-
-        return matchedStnLst;
+        return trainSchedule;
     }
 
 }
