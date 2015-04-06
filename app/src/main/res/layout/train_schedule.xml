@@ -31,16 +31,17 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:id="@+id/stnListView" />
+
+    <!--<LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="65dp">
+        android:layout_height="176dp">
 
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:id="@+id/stnListView" />
-    </LinearLayout>
+    </LinearLayout>-->
 
     <LinearLayout
         android:orientation="horizontal"

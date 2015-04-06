@@ -11,13 +11,26 @@
         android:layout_height="wrap_content"
         android:layout_weight="5">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="New Text"
-            android:id="@+id/trainScheduleDtls"
-            android:textColor="#ff3433ff"
-            android:textSize="18dp" />
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/trainScheduleDtls"
+                android:textColor="#ff3433ff"
+                android:textSize="18dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="New Text"
+                android:id="@+id/trainName"
+                android:textColor="#ff2e272e" />
+        </LinearLayout>
 
         <Button
             android:layout_width="wrap_content"
@@ -26,7 +39,9 @@
             android:id="@+id/liveStatus"
             android:layout_gravity="right"
             android:layout_weight="2"
-            android:textColor="#ffff3742" />
+            android:textColor="#ffff3742"
+            android:onClick="liveStatusHandler" />
+
     </LinearLayout>
 
 

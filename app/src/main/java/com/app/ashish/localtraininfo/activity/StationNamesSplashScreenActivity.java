@@ -2,9 +2,12 @@ package com.app.ashish.localtraininfo.activity;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.widget.Toast;
 
 import com.app.ashish.localtraininfo.R;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
@@ -40,7 +43,11 @@ public class StationNamesSplashScreenActivity extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
+
             super.onPreExecute();
+            if(!isNetworkConnected()) {
+                Toast.makeText(getApplicationContext(),"NO INTERNET CONNECTION",Toast.LENGTH_LONG).show();
+            }
         }
         @Override
         protected String doInBackground(Void... params) {
@@ -86,5 +93,15 @@ public class StationNamesSplashScreenActivity extends ActionBarActivity {
             }
             return out.toString();
         }
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else
+            return true;
     }
 }

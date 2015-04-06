@@ -73,7 +73,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
                     populateStationListInListView(s.toString(), fromStnTxt);
                 } else {
                     listView = (ListView) findViewById(R.id.stnListView);
-                    listView.setVisibility(View.INVISIBLE);
+                    listView.setVisibility(View.GONE);
                 }
             }
 
@@ -96,7 +96,7 @@ public class TrainScheduleActivity  extends ActionBarActivity {
                     populateStationListInListView(s.toString(), toStnTxt);
                 } else {
                     listView = (ListView) findViewById(R.id.stnListView);
-                    listView.setVisibility(View.INVISIBLE);
+                    listView.setVisibility(View.GONE);
                 }
             }
 

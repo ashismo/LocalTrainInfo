@@ -52,19 +52,21 @@ public class TrainScheduleListAdapter extends BaseAdapter {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.train_schedule_list_view, null);
         TextView tv = (TextView)convertView.findViewById(R.id.trainScheduleDtls);
+        TextView trainName = (TextView)convertView.findViewById(R.id.trainName);
 
         String scheduleDtls =  scheduleList.get(position);
         String scheduleArr[] = scheduleDtls.split("/");
         String textToBeDisplayed = "";
         if(scheduleArr != null && scheduleArr.length >= 5) {
-            boolean isTrainAvailableToday = (scheduleArr[4].equalsIgnoreCase("true")) ? true:false;
-            String availableToday = (scheduleArr[4].equalsIgnoreCase("true")) ? "YES":"NO";
-//            textToBeDisplayed = "Train No:- " + scheduleArr[0] + " Dep:- " + scheduleArr[1] +
+            boolean isTrainAvailableToday = (scheduleArr[5].equalsIgnoreCase("true")) ? true:false;
+            String availableToday = (scheduleArr[5].equalsIgnoreCase("true")) ? "YES":"NO";
+//            textToBeDisplayed = "Train No:- " + scheduleArr[1] + " Dep:- " + scheduleArr[0] +
 //                    " Arr:- " + scheduleArr[2] + " Journey:- " + scheduleArr[3] + " Running Today? " + availableToday;
 
-            textToBeDisplayed = scheduleArr[0] + "    " + scheduleArr[1] +
-                    "  " + scheduleArr[2] + " " + scheduleArr[3] + "  " + availableToday;
+            textToBeDisplayed = scheduleArr[1] + "    " + scheduleArr[0] +
+                    "  " + scheduleArr[3] + " " + scheduleArr[4] + "  " + availableToday;
             tv.setText(textToBeDisplayed);
+            trainName.setText(scheduleArr[2]);
             Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
             if(isTrainAvailableToday) {
                 liveStatusBtn.setVisibility(View.VISIBLE);
@@ -80,17 +82,4 @@ public class TrainScheduleListAdapter extends BaseAdapter {
         return convertView;
     }
 
-    public void liveStatusHandler(View v) {
-        //get the row the clicked button is in
-        LinearLayout vwParentRow = (LinearLayout)v.getParent();
-
-        TextView scheduleDtls = (TextView)vwParentRow.getChildAt(0);
-        Button liveStatusBtn = (Button)vwParentRow.getChildAt(1);
-        String scheduleStr = scheduleDtls.getText().toString();
-        String trainNo = "0";
-        if(scheduleStr != null && scheduleStr.split(" ").length > 0) {
-            trainNo = scheduleStr.split(" ")[0].trim();
-        }
-        liveStatusBtn.setText(trainNo);
-    }
 }

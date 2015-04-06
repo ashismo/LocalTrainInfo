@@ -17,6 +17,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -95,11 +96,14 @@ public class SplashScreenActivity extends ActionBarActivity {
                     setContentView(R.layout.train_schedule);
                     EditText fromTxt = (EditText) findViewById(R.id.fromStn);
                     fromTxt.setText(fromStn);
+                    fromTxt.setEnabled(false);
                     EditText toTxt = (EditText) findViewById(R.id.toStn);
                     toTxt.setText(toStn);
+                    toTxt.setEnabled(false);
                     Button btn = (Button) findViewById(R.id.search);
                     btn.setText("Back");
                     ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.VISIBLE);
+                    ((ListView) findViewById(R.id.stnListView)).setVisibility(View.GONE);
 
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -131,5 +135,19 @@ public class SplashScreenActivity extends ActionBarActivity {
             }
             return out.toString();
         }
+    }
+
+    public void liveStatusHandler(View v) {
+        //get the row the clicked button is in
+        LinearLayout vwParentRow = (LinearLayout)v.getParent();
+
+        TextView scheduleDtls = (TextView)vwParentRow.getChildAt(0);
+        Button liveStatusBtn = (Button)vwParentRow.getChildAt(1);
+        String scheduleStr = scheduleDtls.getText().toString();
+        String trainNo = "0";
+        if(scheduleStr != null && scheduleStr.split(" ").length > 0) {
+            trainNo = scheduleStr.split(" ")[0].trim();
+        }
+        liveStatusBtn.setText(trainNo);
     }
 }
