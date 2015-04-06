@@ -24,7 +24,8 @@ import java.util.List;
  */
 public class TrainScheduleListAdapter extends BaseAdapter {
     private Context context= null;
-    List<String> scheduleList = null;
+    private List<String> scheduleList = null;
+    private String trainNo = "0";
 
     public TrainScheduleListAdapter(Context context, List<String> scheduleList) {
         this.context = context;
@@ -47,7 +48,7 @@ public class TrainScheduleListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // inflate the layout for each item of listView
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.train_schedule_list_view, null);
@@ -65,21 +66,28 @@ public class TrainScheduleListAdapter extends BaseAdapter {
 
             textToBeDisplayed = scheduleArr[1] + "    " + scheduleArr[0] +
                     "  " + scheduleArr[3] + " " + scheduleArr[4] + "  " + availableToday;
+            trainNo = scheduleArr[1];
             tv.setText(textToBeDisplayed);
             trainName.setText(scheduleArr[2]);
-            Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
+            final Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
             if(isTrainAvailableToday) {
                 liveStatusBtn.setVisibility(View.VISIBLE);
             } else {
                 liveStatusBtn.setVisibility(View.INVISIBLE);
             }
 
-
+            liveStatusBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String scheduleDtls = scheduleList.get(position);
+                    String scheduleArr[] = scheduleDtls.split("/");
+                    liveStatusBtn.setText(scheduleArr[1]);
+                }
+            });
 
         }
         // Check if train is available today
 
         return convertView;
     }
-
 }

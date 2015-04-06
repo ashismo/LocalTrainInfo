@@ -40,7 +40,7 @@
             android:layout_gravity="right"
             android:layout_weight="2"
             android:textColor="#ffff3742"
-            android:onClick="liveStatusHandler" />
+            android:focusable="false" />
 
     </LinearLayout>
 

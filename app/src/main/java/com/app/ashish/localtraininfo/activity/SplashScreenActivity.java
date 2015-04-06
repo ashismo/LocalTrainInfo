@@ -137,17 +137,5 @@ public class SplashScreenActivity extends ActionBarActivity {
         }
     }
 
-    public void liveStatusHandler(View v) {
-        //get the row the clicked button is in
-        LinearLayout vwParentRow = (LinearLayout)v.getParent();
 
-        TextView scheduleDtls = (TextView)vwParentRow.getChildAt(0);
-        Button liveStatusBtn = (Button)vwParentRow.getChildAt(1);
-        String scheduleStr = scheduleDtls.getText().toString();
-        String trainNo = "0";
-        if(scheduleStr != null && scheduleStr.split(" ").length > 0) {
-            trainNo = scheduleStr.split(" ")[0].trim();
-        }
-        liveStatusBtn.setText(trainNo);
-    }
 }
