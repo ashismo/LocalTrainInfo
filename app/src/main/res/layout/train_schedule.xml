@@ -72,17 +72,5 @@
 
     </LinearLayout>
 
-    <!--<LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="New Text"
-            android:id="@+id/serviceData"
-            android:layout_gravity="center_horizontal" />
-    </LinearLayout>-->
 
 </LinearLayout>

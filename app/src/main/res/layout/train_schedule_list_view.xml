@@ -19,7 +19,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
                 android:id="@+id/trainScheduleDtls"
                 android:textColor="#ff3433ff"
                 android:textSize="18dp" />
@@ -27,7 +26,6 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New Text"
                 android:id="@+id/trainName"
                 android:textColor="#ff2e272e" />
         </LinearLayout>

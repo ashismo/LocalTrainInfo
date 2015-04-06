@@ -26,6 +26,7 @@ public class TrainScheduleListAdapter extends BaseAdapter {
     private Context context= null;
     private List<String> scheduleList = null;
     private String trainNo = "0";
+    private boolean isTrainFound = true;
 
     public TrainScheduleListAdapter(Context context, List<String> scheduleList) {
         this.context = context;
@@ -33,8 +34,12 @@ public class TrainScheduleListAdapter extends BaseAdapter {
     }
     @Override
     public int getCount() {
-        if(scheduleList != null) return scheduleList.size();
-        return 0;
+        if(scheduleList != null && scheduleList.size() > 0) {
+            return scheduleList.size();
+        } else {
+            isTrainFound = false;
+        }
+        return 1;
     }
 
     @Override
@@ -55,10 +60,10 @@ public class TrainScheduleListAdapter extends BaseAdapter {
         TextView tv = (TextView)convertView.findViewById(R.id.trainScheduleDtls);
         TextView trainName = (TextView)convertView.findViewById(R.id.trainName);
 
-        String scheduleDtls =  scheduleList.get(position);
-        String scheduleArr[] = scheduleDtls.split("/");
+        String scheduleDtls =  (isTrainFound) ? scheduleList.get(position) : null;
+        String scheduleArr[] = (scheduleDtls != null) ? scheduleDtls.split("/") : null;
         String textToBeDisplayed = "";
-        if(scheduleArr != null && scheduleArr.length >= 5) {
+        if(isTrainFound && scheduleArr != null && scheduleArr.length >= 5) {
             boolean isTrainAvailableToday = (scheduleArr[5].equalsIgnoreCase("true")) ? true:false;
             String availableToday = (scheduleArr[5].equalsIgnoreCase("true")) ? "YES":"NO";
 //            textToBeDisplayed = "Train No:- " + scheduleArr[1] + " Dep:- " + scheduleArr[0] +
@@ -66,7 +71,6 @@ public class TrainScheduleListAdapter extends BaseAdapter {
 
             textToBeDisplayed = scheduleArr[1] + "    " + scheduleArr[0] +
                     "  " + scheduleArr[3] + " " + scheduleArr[4] + "  " + availableToday;
-            trainNo = scheduleArr[1];
             tv.setText(textToBeDisplayed);
             trainName.setText(scheduleArr[2]);
             final Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
@@ -85,6 +89,13 @@ public class TrainScheduleListAdapter extends BaseAdapter {
                 }
             });
 
+        }
+
+        // Display message if no train available
+        if(!isTrainFound) {
+            Button liveStatusBtn = (Button)convertView.findViewById(R.id.liveStatus);
+            liveStatusBtn.setVisibility(View.INVISIBLE);
+            tv.setText("No Train found in this route");
         }
         // Check if train is available today
 
