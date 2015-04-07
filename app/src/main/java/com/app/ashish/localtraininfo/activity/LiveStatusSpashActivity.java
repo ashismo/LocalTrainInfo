@@ -3,23 +3,21 @@ package com.app.ashish.localtraininfo.activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
+
 import com.app.ashish.localtraininfo.R;
 import com.app.ashish.localtraininfo.adapters.TrainScheduleListAdapter;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.RailInfoUtil;
-import com.app.ashish.localtraininfo.util.WebServiceCall;
-
-import android.os.Handler;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,6 +26,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -36,7 +35,7 @@ import java.util.List;
 /**
  * Created by ashis_000 on 4/5/2015.
  */
-public class SplashScreenActivity extends ActionBarActivity {
+public class LiveStatusSpashActivity extends ActionBarActivity {
     private DataShareSingleton appData = DataShareSingleton.getInstance();
     private String fromStn = "";
     private String toStn = "";
@@ -45,8 +44,6 @@ public class SplashScreenActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
 
-//        fromStn = getIntent().getExtras().getString("from");
-//        toStn = getIntent().getExtras().getString("to");
         fromStn = appData.getFromStation();
         toStn = appData.getToStation();
 
@@ -81,47 +78,20 @@ public class SplashScreenActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String results) {
-            if (results != null) {
-
-//                List<String> trainScheduleArray = RailInfoUtil.parseTrainScheduleDetails(results);
-//                commonData.setTrainScheduleArray(trainScheduleArray);
-
-                if(commonData.getWebServiceCallType() == WebServiceCallType.ALL_STATION_NAME_CALL) {
-                    if (commonData.getAllStnList() == null) {
-                        List<String> allStnMap = RailInfoUtil.parseStationDetails(results);
-                        commonData.setAllStnList(allStnMap);
+            try {
+                if (results != null) {
+                    if (commonData.getWebServiceCallType() == WebServiceCallType.LIVE_STATUS_CALL) {
+//                    finish();
+                        setContentView(R.layout.livestatus_layout);
+//                        JSONObject jsonResult = new JSONObject(results);
+//                        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/hirakakupronbold.ttf");
+                        EditText liveStatusText = ((EditText) findViewById(R.id.liveStatusText));
+//                        liveStatusText.setTypeface(font);
+                        liveStatusText.setText(results);
                     }
-                } else if(commonData.getWebServiceCallType() == WebServiceCallType.TRAIN_SCHEDULE_CAL) {
-                    List<String> trainScheduleArray = RailInfoUtil.parseTrainScheduleDetails(results);
-                    commonData.setTrainScheduleArray(trainScheduleArray);
-
-                    setContentView(R.layout.train_schedule);
-                    EditText fromTxt = (EditText) findViewById(R.id.fromStn);
-                    fromTxt.setText(fromStn);
-                    fromTxt.setEnabled(false);
-                    EditText toTxt = (EditText) findViewById(R.id.toStn);
-                    toTxt.setText(toStn);
-                    toTxt.setEnabled(false);
-                    Button btn = (Button) findViewById(R.id.search);
-                    btn.setText("Back");
-                    ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.VISIBLE);
-                    ((ListView) findViewById(R.id.stnListView)).setVisibility(View.GONE);
-
-                    btn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            finish();
-                        }
-                    });
-
-                    ListView scheduleView = (ListView)findViewById(R.id.scheduleView);
-                    TrainScheduleListAdapter trainScheduleAdapter = new TrainScheduleListAdapter(getApplicationContext(), commonData.getTrainScheduleArray());
-                    scheduleView.setAdapter(trainScheduleAdapter);
                 }
+            } catch (Exception e){
 
-                // close this activity
-//                finish();
-                //DataShareSingleton.getInstance().getEditText().setText(results);
             }
         }
 

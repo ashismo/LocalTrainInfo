@@ -1,6 +1,7 @@
 package com.app.ashish.localtraininfo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,12 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.activity.LiveStatusSpashActivity;
+import com.app.ashish.localtraininfo.activity.TrainScheduleActivity;
+import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
+import com.app.ashish.localtraininfo.util.DataShareSingleton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,6 +91,15 @@ public class TrainScheduleListAdapter extends BaseAdapter {
                     String scheduleDtls = scheduleList.get(position);
                     String scheduleArr[] = scheduleDtls.split("/");
                     liveStatusBtn.setText(scheduleArr[1]);
+
+                    DataShareSingleton appData = DataShareSingleton.getInstance();
+                    appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table
+                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + scheduleArr[1];
+                    appData.setUrl(url);
+                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL);
+
+                    Intent i = new Intent(appData.getActivity(), LiveStatusSpashActivity.class);
+                    appData.getActivity().startActivity(i);
                 }
             });
 

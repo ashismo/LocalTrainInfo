@@ -132,8 +132,11 @@ public class TrainScheduleActivity  extends ActionBarActivity {
         appData.setWebServiceCallType(WebServiceCallType.TRAIN_SCHEDULE_CAL);
 
         Intent i = new Intent(getApplicationContext(), SplashScreenActivity.class);
-        i.putExtra("from", fromStnTxt.getText().toString());
-        i.putExtra("to", toStnTxt.getText().toString());
+        appData.setToStation(toStnTxt.getText().toString());
+        appData.setFromStation(fromStnTxt.getText().toString());
+//        i.putExtra("from", fromStnTxt.getText().toString());
+//        i.putExtra("to", toStnTxt.getText().toString());
+        appData.setActivity(this);
         startActivity(i);
 
 //        ListView scheduleView = (ListView)findViewById(R.id.scheduleView);

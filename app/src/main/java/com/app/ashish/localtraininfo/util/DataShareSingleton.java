@@ -1,5 +1,6 @@
 package com.app.ashish.localtraininfo.util;
 
+import android.app.Activity;
 import android.content.Context;
 import android.widget.EditText;
 
@@ -21,6 +22,9 @@ public class DataShareSingleton {
     private List<String> trainScheduleArray = null;
     private WebServiceCallType webServiceCallType;
     private Context context;
+    private Activity activity;
+    private String fromStation;
+    private String toStation;
 
     private DataShareSingleton() {
     }
@@ -86,5 +90,29 @@ public class DataShareSingleton {
 
     public void setTrainScheduleArray(List<String> trainScheduleArray) {
         this.trainScheduleArray = trainScheduleArray;
+    }
+
+    public Activity getActivity() {
+        return activity;
+    }
+
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public String getFromStation() {
+        return fromStation;
+    }
+
+    public void setFromStation(String fromStation) {
+        this.fromStation = fromStation;
+    }
+
+    public String getToStation() {
+        return toStation;
+    }
+
+    public void setToStation(String toStation) {
+        this.toStation = toStation;
     }
 }
