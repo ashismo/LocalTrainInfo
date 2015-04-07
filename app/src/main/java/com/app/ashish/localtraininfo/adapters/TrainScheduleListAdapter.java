@@ -90,7 +90,6 @@ public class TrainScheduleListAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     String scheduleDtls = scheduleList.get(position);
                     String scheduleArr[] = scheduleDtls.split("/");
-                    liveStatusBtn.setText(scheduleArr[1]);
 
                     DataShareSingleton appData = DataShareSingleton.getInstance();
                     appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table

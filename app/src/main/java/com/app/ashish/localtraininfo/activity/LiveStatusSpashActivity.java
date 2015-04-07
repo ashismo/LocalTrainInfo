@@ -7,7 +7,10 @@ import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -83,15 +86,16 @@ public class LiveStatusSpashActivity extends ActionBarActivity {
                     if (commonData.getWebServiceCallType() == WebServiceCallType.LIVE_STATUS_CALL) {
 //                    finish();
                         setContentView(R.layout.livestatus_layout);
-//                        JSONObject jsonResult = new JSONObject(results);
-//                        Typeface font = Typeface.createFromAsset(getAssets(), "fonts/hirakakupronbold.ttf");
-                        EditText liveStatusText = ((EditText) findViewById(R.id.liveStatusText));
-//                        liveStatusText.setTypeface(font);
-                        liveStatusText.setText(results);
+                        results = results.substring(1, results.length() - 1);
+                        JSONObject jsonResult = new JSONObject(results);
+                        WebView liveStatusWebView = ((WebView) findViewById(R.id.liveStatusWebView));
+                        WebSettings webSettings = liveStatusWebView.getSettings();
+                        webSettings.setTextSize(WebSettings.TextSize.SMALLEST);
+                        liveStatusWebView.loadDataWithBaseURL(null, jsonResult.getString("result"), "text/html", "UTF-8", null);
                     }
                 }
             } catch (Exception e){
-
+e.printStackTrace();
             }
         }
 
