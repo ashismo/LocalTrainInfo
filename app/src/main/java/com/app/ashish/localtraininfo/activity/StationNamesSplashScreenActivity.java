@@ -67,6 +67,10 @@ public class StationNamesSplashScreenActivity extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String results) {
+            if(results == null || results.length() < 100) {
+                results = commonData.getHardCodedAllStations();
+
+            }
             if (results != null) {
 
                 if (commonData.getAllStnList() == null) {

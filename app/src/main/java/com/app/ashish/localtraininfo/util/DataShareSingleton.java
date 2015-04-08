@@ -25,6 +25,7 @@ public class DataShareSingleton {
     private Activity activity;
     private String fromStation;
     private String toStation;
+    private String hardCodedAllStations;
 
     private DataShareSingleton() {
     }
@@ -114,5 +115,13 @@ public class DataShareSingleton {
 
     public void setToStation(String toStation) {
         this.toStation = toStation;
+    }
+
+    public String getHardCodedAllStations() {
+        return hardCodedAllStations;
+    }
+
+    public void setHardCodedAllStations(String hardCodedAllStations) {
+        this.hardCodedAllStations = hardCodedAllStations;
     }
 }

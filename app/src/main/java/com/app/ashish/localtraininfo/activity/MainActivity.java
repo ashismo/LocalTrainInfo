@@ -22,6 +22,9 @@ import com.app.ashish.localtraininfo.services.RailInfoServices;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -55,6 +58,16 @@ public class MainActivity extends ActionBarActivity
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
+//        Properties props=new Properties();
+//        InputStream inputStream =
+//                this.getClass().getClassLoader().getResourceAsStream("app.properties");
+//        try {
+//            props.load(inputStream);
+//            String allStations = props.getProperty("ALL_STATIONS1");
+//            DataShareSingleton.getInstance().setHardCodedAllStations(allStations);
+//        } catch (Exception e) {
+//
+//        }
         // Display the train schedule screen by default
 //        EditText editText = (EditText)findViewById(R.id.serviceData);
 //        DataShareSingleton appData = DataShareSingleton.getInstance();
