@@ -51,6 +51,12 @@ public class TrainScheduleActivity  extends ActionBarActivity {
     private DataShareSingleton commonData = DataShareSingleton.getInstance();
 
     @Override
+    protected void onStart() {
+        getAllStations();
+        super.onStart();
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true); // Set the navigation up to the main page
@@ -60,6 +66,13 @@ public class TrainScheduleActivity  extends ActionBarActivity {
 
         fromStnTxt = (EditText)findViewById(R.id.fromStn);
         toStnTxt = (EditText)findViewById(R.id.toStn);
+
+        if(commonData.getFromStation() != null) {
+            fromStnTxt.setText(commonData.getFromStation());
+        }
+        if(commonData.getToStation() != null) {
+            toStnTxt.setText(commonData.getToStation());
+        }
 
         fromStnTxt.addTextChangedListener(new TextWatcher(){
             @Override
@@ -120,6 +133,9 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             }
 
         });
+
+        // Display history in the list view
+        populateHistoryInListView();
     }
 
     private void getTrainListByRoute(String fromStn, String toStn) {
@@ -170,4 +186,51 @@ public class TrainScheduleActivity  extends ActionBarActivity {
         });
     }
 
+    private void populateHistoryInListView() {
+        String[] historyData = new DatabaseUtil(getApplicationContext()).getTrainsFromHistoryTable();
+        if(historyData != null) {
+            dataAdapter = new ArrayAdapter<String>(this, R.layout.history_by_train_no_layout, R.id.historyDataByTrainNoTextView, historyData);
+            final ListView listViewHistoryByTrainNo = (ListView) findViewById(R.id.historyByTrainNo);
+            listViewHistoryByTrainNo.setVisibility(View.VISIBLE);
+            // Assign adapter to ListView
+            listViewHistoryByTrainNo.setAdapter(dataAdapter);
+            listViewHistoryByTrainNo.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    String itemValue = (String) listViewHistoryByTrainNo.getItemAtPosition(position);
+                    String trainNo = itemValue.substring(1,itemValue.indexOf("]"));
+                    String trainDtls = itemValue.substring(itemValue.indexOf("]")+1);
+
+                    DataShareSingleton appData = DataShareSingleton.getInstance();
+                    appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table
+                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + trainNo;
+
+                    // Insert data into history table
+                    DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
+                    dbUtil.updateTrainInHistoryTable(trainNo, trainDtls);
+
+                    appData.setUrl(url);
+                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL);
+
+                    Intent i = new Intent(TrainScheduleActivity.this, LiveStatusSpashActivity.class);
+                    TrainScheduleActivity.this.startActivityForResult(i, 1);
+
+//                    listView.setVisibility(View.INVISIBLE);
+                }
+            });
+        }
+
+    }
+
+    private void getAllStations() {
+        DataShareSingleton appData = DataShareSingleton.getInstance();
+        if (appData.getAllStnList() == null || appData.getAllStnList().size() == 0) {
+            String url = "http://111.118.213.140/js/cmp/stations.js";
+            appData.setUrl(url);
+            appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
+
+            Intent i = new Intent(getApplicationContext(), StationNamesSplashScreenActivity.class);
+            startActivity(i);
+        }
+    }
 }

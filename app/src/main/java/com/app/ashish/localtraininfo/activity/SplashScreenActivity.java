@@ -14,6 +14,7 @@ import com.app.ashish.localtraininfo.util.RailInfoUtil;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
 
 import android.os.Handler;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -97,15 +98,16 @@ public class SplashScreenActivity extends ActionBarActivity {
 
                     setContentView(R.layout.train_schedule);
                     EditText fromTxt = (EditText) findViewById(R.id.fromStn);
-                    fromTxt.setText(fromStn);
+                    fromTxt.setText(fromStn.toUpperCase());
                     fromTxt.setEnabled(false);
                     EditText toTxt = (EditText) findViewById(R.id.toStn);
-                    toTxt.setText(toStn);
+                    toTxt.setText(toStn.toUpperCase());
                     toTxt.setEnabled(false);
                     Button btn = (Button) findViewById(R.id.search);
                     btn.setText("Back");
                     ((TextView)findViewById(R.id.scheduleHeader)).setVisibility(View.VISIBLE);
                     ((ListView) findViewById(R.id.stnListView)).setVisibility(View.GONE);
+                    ((LinearLayout) findViewById(R.id.historyLayout)).setVisibility(View.GONE);
 
                     btn.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -140,4 +142,14 @@ public class SplashScreenActivity extends ActionBarActivity {
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            Intent a = new Intent(this,TrainScheduleActivity.class);
+            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(a);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

@@ -10,7 +10,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.MainActivity"
+            android:name=".activity.TrainScheduleActivity"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,11 +20,11 @@
         </activity>
 
         <!-- A child of the main activity -->
-        <activity
+        <!--<activity
             android:name=".activity.TrainScheduleActivity"
             android:parentActivityName=".activity.MainActivity"
             android:label="@string/app_name">
-        </activity>
+        </activity>-->
 
         <!-- A child of the main activity -->
         <activity
