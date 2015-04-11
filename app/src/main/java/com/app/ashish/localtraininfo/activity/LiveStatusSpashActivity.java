@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -205,4 +206,14 @@ public class LiveStatusSpashActivity extends ActionBarActivity {
         return htmlData;
     }
 
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (keyCode == KeyEvent.KEYCODE_BACK) {
+//            Intent a = new Intent(this,TrainScheduleActivity.class);
+//            a.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            startActivity(a);
+//            return true;
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 }
