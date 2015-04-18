@@ -94,15 +94,15 @@ public class TrainScheduleListAdapter extends BaseAdapter {
 
                     DataShareSingleton appData = DataShareSingleton.getInstance();
                     appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table
-                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + scheduleArr[1];
-
+//                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + scheduleArr[1];
+                    String url = "http://m.runningstatus.in/status/" + scheduleArr[1];
                     // Insert data into history table
                     DatabaseUtil dbUtil = new DatabaseUtil(context);
                     String trainDtls = scheduleArr[2] + "(" + scheduleArr[0] + ")";
                     dbUtil.updateTrainInHistoryTable(scheduleArr[1], trainDtls);
 
                     appData.setUrl(url);
-                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL);
+                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL2);
 
                     Intent i = new Intent(appData.getActivity(), LiveStatusSpashActivity.class);
                     appData.getActivity().startActivity(i);

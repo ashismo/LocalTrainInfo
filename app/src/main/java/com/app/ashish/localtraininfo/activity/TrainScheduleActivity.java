@@ -203,14 +203,15 @@ public class TrainScheduleActivity  extends ActionBarActivity {
 
                     DataShareSingleton appData = DataShareSingleton.getInstance();
                     appData.setTrainScheduleArray(new ArrayList<String>()); // This will clear the table
-                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + trainNo;
+//                    String url = "http://111.118.213.141/getIR.aspx?jsonp=1&Data=RUNSTATUSALL~" + trainNo;
+                    String url = "http://m.runningstatus.in/status/" + trainNo;
 
                     // Insert data into history table
                     DatabaseUtil dbUtil = new DatabaseUtil(getApplicationContext());
                     dbUtil.updateTrainInHistoryTable(trainNo, trainDtls);
 
                     appData.setUrl(url);
-                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL);
+                    appData.setWebServiceCallType(WebServiceCallType.LIVE_STATUS_CALL2);
 
                     Intent i = new Intent(TrainScheduleActivity.this, LiveStatusSpashActivity.class);
                     TrainScheduleActivity.this.startActivityForResult(i, 1);

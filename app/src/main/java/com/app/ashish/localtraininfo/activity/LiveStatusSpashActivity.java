@@ -105,6 +105,22 @@ public class LiveStatusSpashActivity extends ActionBarActivity {
 
                         liveStatusWebView.loadDataWithBaseURL(null, sb.toString(), "text/html", "UTF-8", null);
                     }
+                    else if (commonData.getWebServiceCallType() == WebServiceCallType.LIVE_STATUS_CALL2) {
+//                    finish();
+                        setContentView(R.layout.livestatus_layout);
+//                        results = results.substring(1, results.length() - 1);
+//                        JSONObject jsonResult = new JSONObject(results);
+                        WebView liveStatusWebView = ((WebView) findViewById(R.id.liveStatusWebView));
+                        WebSettings webSettings = liveStatusWebView.getSettings();
+                        webSettings.setTextSize(WebSettings.TextSize.NORMAL);
+//                        StringBuilder sb = new StringBuilder();
+//                        sb.append("<HTML><HEAD><LINK href=\"file:///android_asset/railInfo.css\" type=\"text/css\" rel=\"stylesheet\"/></HEAD><body>");
+//                        sb.append(parseAndFormatHtml(jsonResult.getString("result")));
+//                        sb.append("</body></HTML>");
+                        results = results.replace("/style/reset.css","file:///android_asset/railInfo2.css");
+                        results = results.replace("© 2014 - RunningStatus.IN - Mobile","");
+                        liveStatusWebView.loadDataWithBaseURL(null, results, "text/html", "UTF-8", null);
+                    }
                 }
             } catch (Exception e){
                 e.printStackTrace();
