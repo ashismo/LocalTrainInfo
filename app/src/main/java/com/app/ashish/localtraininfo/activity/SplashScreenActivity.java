@@ -91,6 +91,7 @@ public class SplashScreenActivity extends ActionBarActivity {
                     if (commonData.getAllStnList() == null) {
                         List<String> allStnMap = RailInfoUtil.parseStationDetails(results);
                         commonData.setAllStnList(allStnMap);
+                        ((Button) findViewById(R.id.loadStations)).setVisibility(View.GONE);
                     }
                 } else if(commonData.getWebServiceCallType() == WebServiceCallType.TRAIN_SCHEDULE_CAL) {
                     List<String> trainScheduleArray = RailInfoUtil.parseTrainScheduleDetails(results);

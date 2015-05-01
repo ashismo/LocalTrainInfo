@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.app.ashish.localtraininfo.R;
 import com.app.ashish.localtraininfo.adapters.TrainScheduleListAdapter;
+import com.app.ashish.localtraininfo.bean.SplashActivity;
 import com.app.ashish.localtraininfo.bean.WebServiceCallType;
 import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
@@ -45,14 +46,16 @@ import java.util.List;
  */
 public class TrainScheduleActivity  extends ActionBarActivity {
     private EditText fromStnTxt, toStnTxt;
-    private Button searchTrain;
+    private Button searchTrain, bLoanAllStations;
     private ArrayAdapter<String> dataAdapter = null;
     private ListView listView = null;
     private DataShareSingleton commonData = DataShareSingleton.getInstance();
 
     @Override
     protected void onStart() {
-        getAllStations();
+        if(!commonData.isMyStationCodeKnown()) {
+            getAllStations();
+        }
         super.onStart();
     }
 
@@ -133,7 +136,19 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             }
 
         });
+        bLoanAllStations = (Button) findViewById(R.id.loadStations);
 
+        if (commonData.getAllStnList() == null || commonData.getAllStnList().size() == 0) {
+            bLoanAllStations.setVisibility(View.VISIBLE);
+        } else {
+            bLoanAllStations.setVisibility(View.GONE);
+        }
+        bLoanAllStations.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getAllStations();
+            }
+        });
         // Display history in the list view
         populateHistoryInListView();
     }
@@ -231,7 +246,11 @@ public class TrainScheduleActivity  extends ActionBarActivity {
             appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
 
             Intent i = new Intent(getApplicationContext(), StationNamesSplashScreenActivity.class);
+            i.putExtra("SPLASH_ACTIVITY", SplashActivity.LOAD_ALL_STATIONS);
             startActivity(i);
+        } else {
+            Button bLoanAllStations = (Button) findViewById(R.id.loadStations);
+            bLoanAllStations.setVisibility(View.GONE);
         }
     }
 }

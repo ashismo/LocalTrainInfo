@@ -13,7 +13,7 @@
     </style>
 
     <!-- Fonts to be used in menu items -->
-    <style name="appBgGnd">
+        <style name="appBgGnd">
         <item name="android:background">#ffeee4ff</item>
     </style>
 </resources>

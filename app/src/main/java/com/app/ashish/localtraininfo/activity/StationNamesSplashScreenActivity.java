@@ -7,9 +7,15 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.view.View;
+import android.view.Window;
+import android.widget.Button;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.app.ashish.localtraininfo.R;
+import com.app.ashish.localtraininfo.bean.SplashActivity;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.RailInfoUtil;
 
@@ -34,6 +40,23 @@ public class StationNamesSplashScreenActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.splash_activity);
+        SplashActivity splashActivity = (SplashActivity) getIntent().getExtras().get("SPLASH_ACTIVITY");
+        if(splashActivity.equals(SplashActivity.LOAD_ALL_STATIONS)) {
+            TextView tv = (TextView)findViewById(R.id.loadingDataType);
+            tv.setText(R.string.loadingDataType_allStations);
+            Button bKnowMyStationCodes = (Button)findViewById(R.id.knowMyStationCodes);
+            bKnowMyStationCodes.setVisibility(View.VISIBLE);
+            ProgressBar dataFetchProgressbar = (ProgressBar)findViewById(R.id.dataFetchProgressbar);
+            dataFetchProgressbar.setVisibility(View.VISIBLE);
+
+            bKnowMyStationCodes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DataShareSingleton.getInstance().setMyStationCodeKnown(true);
+                    StationNamesSplashScreenActivity.this.finish();
+                }
+            });
+        }
         new WebServiceCall().execute();
     }
 

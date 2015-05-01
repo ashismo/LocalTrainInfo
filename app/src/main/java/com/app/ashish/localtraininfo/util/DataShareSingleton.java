@@ -26,6 +26,7 @@ public class DataShareSingleton {
     private String fromStation;
     private String toStation;
     private String hardCodedAllStations;
+    private boolean isMyStationCodeKnown;
 
     private DataShareSingleton() {
     }
@@ -123,5 +124,13 @@ public class DataShareSingleton {
 
     public void setHardCodedAllStations(String hardCodedAllStations) {
         this.hardCodedAllStations = hardCodedAllStations;
+    }
+
+    public boolean isMyStationCodeKnown() {
+        return isMyStationCodeKnown;
+    }
+
+    public void setMyStationCodeKnown(boolean isMyStationCodeKnown) {
+        this.isMyStationCodeKnown = isMyStationCodeKnown;
     }
 }
