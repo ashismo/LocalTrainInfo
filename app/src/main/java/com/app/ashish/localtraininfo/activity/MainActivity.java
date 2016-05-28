@@ -193,7 +193,8 @@ public class MainActivity extends ActionBarActivity {
     private void getAllStations() {
         DataShareSingleton appData = DataShareSingleton.getInstance();
         if (appData.getAllStnList() == null || appData.getAllStnList().size() == 0) {
-            String url = "http://111.118.213.140/js/cmp/stations.js";
+//            String url = "http://111.118.213.140/js/cmp/stations.js";
+            String url = "http://erail.in/js/cmp/stations.js";
             appData.setUrl(url);
             appData.setWebServiceCallType(WebServiceCallType.ALL_STATION_NAME_CALL);
 
