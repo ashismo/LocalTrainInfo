@@ -21,6 +21,7 @@ import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -47,7 +48,7 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        MobileAds.initialize(this, "ca-app-pub-1558624284218484~6802128651");
 //        mNavigationDrawerFragment = (NavigationDrawerFragment)
 //                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 //        mTitle = getTitle();

@@ -9,10 +9,10 @@
         android:textSize="16sp" >
     </TextView>
 
-    <Button
+    <!--<Button
         style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="X"
-        android:id="@+id/deleteHistory" />
+        android:id="@+id/deleteHistory" />-->
 </LinearLayout>
