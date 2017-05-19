@@ -21,6 +21,8 @@ import com.app.ashish.localtraininfo.services.RailInfoInterface;
 import com.app.ashish.localtraininfo.services.RailInfoServices;
 import com.app.ashish.localtraininfo.util.DataShareSingleton;
 import com.app.ashish.localtraininfo.util.WebServiceCall;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
 import java.io.InputStream;
@@ -39,6 +41,8 @@ public class MainActivity extends ActionBarActivity {
      */
     private CharSequence mTitle;
 
+    private AdView mAdView;
+
     @Override
     protected void onStart() {
         getAllStations();
@@ -48,7 +52,16 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        /* Mobo Ad integration Start*/
         MobileAds.initialize(this, "ca-app-pub-1558624284218484~6802128651");
+
+        mAdView = (AdView) findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+        /* Mobo Ad integration End*/
+
+
 //        mNavigationDrawerFragment = (NavigationDrawerFragment)
 //                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 //        mTitle = getTitle();
